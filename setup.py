@@ -8,14 +8,14 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="uwrapper",
-    version="0.0.0",
+    version="0.1.0",
     author="Pedro Spezziale",
     author_email="pedro_s_m_rodrigues@hotmail.com",
     description="Simple wrapper for UnionMangas.top's mangas and webtoons",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/puchunim/uwrapper",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(where="uwrapper"),
     install_requires=[
         'requests',
         'lxml'
