@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="uwrapper",
-    version="0.1.1b",
+    version="0.1.2b",
     author="Pedro Spezziale",
     author_email="pedro_s_m_rodrigues@hotmail.com",
     description="Simple wrapper for UnionMangas.top's mangas and webtoons",
