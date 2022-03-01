@@ -16,10 +16,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/puchunim/uwrapper",
     packages=setuptools.find_packages(),
-    install_requires=[
-        'requests',
-        'lxml'
-    ],
+    install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
