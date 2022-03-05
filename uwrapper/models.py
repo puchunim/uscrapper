@@ -58,26 +58,30 @@ class Manga:
         self.alt_names, self.genders = [], []
         self.author, self.artist, self.status = None, None, None
         self.name, self.rate, self.description = None, None, None
+        self.thumbnail, self.votes, self.length = None, None, None
 
         # Temporary home and url variables, this vars
         # will be replaced by the real ones when the
         # manga exists.
         url = "https://unionleitor.top/pagina-manga/{}".format(name.lower().replace(" ", "-"))
         home = get(url, allow_redirects=False)
-
+         
         if home.status_code not in [404, 302]:
             # Xpaths to get the additional information of the manga,
             # from the home page.
             desc_x = '//div[@class="col-md-8 col-xs-12"][{}]{}'
 
             # Intrinsic attributes
-            self.exists = True
             self.home = html.fromstring(home.content)
             self.url = url
-            
+
             # Information about the manga itself
+            self.exists = True
             self.name = self.home.xpath('//div[@class="col-md-12"]/h2/text()')[0]
+            self.thumbnail = self.home.xpath('//img[@class="img-thumbnail"]/@src')[0]
+            self.length = len(self.home.xpath('//div[@class="col-xs-6 col-md-6"]'))
             self.rate = float(self.home.xpath(desc_x.format(1, '/h2/text()'))[0].strip("# "))
+            self.votes = int(self.home.xpath(desc_x.format(1, '/h2/small/strong/text()'))[0])
             self.alt_names = self.home.xpath(desc_x.format(2, "/h4/text()"))[0].strip().split(", ")
             self.genders = self.home.xpath(desc_x.format(3, "/h4/a/text()"))
             self.author = self.home.xpath(desc_x.format(4, "/h4/text()"))[0].strip()
