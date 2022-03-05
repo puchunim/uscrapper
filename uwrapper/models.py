@@ -4,7 +4,54 @@ from requests import get # GET request function
 from lxml import html # HTML parsing library
 
 class Manga:
-    """Class that represents a manga"""
+    """
+    Class that represents a manga
+    
+    [Attrs]
+     exists: bool
+        True if the manga exists, False otherwise.
+         
+     *ALL ATTRIBUTES ARE NULL BY DEFAULT*        
+     name: str
+        The name of the manga.
+
+     rate: float
+        The rate of the manga.
+
+     thumbnaill: str
+        The url of the manga's thumbnail.
+
+     votes: int
+        The number of votes the manga has.
+        
+     length: int
+        The length of the manga in chapters.
+
+     alt_names: list
+        A list of alternative names of the manga.
+            
+     genres: list
+        A list of manga's genres.
+            
+     author: str
+        Manga's author name.
+         
+     artist: str
+        Manga's artist name.
+        
+     status: str
+        Manga's release status.
+        
+     description: str
+        Manga's description.
+        
+     home: lxml.html.HtmlElement
+        The HTML element of the manga's home page.
+
+     url: str
+        The URL of the manga's home page.
+    """
+
     def __init__(self, name):
         """
         Initializes the class with the name of the manga
@@ -13,50 +60,6 @@ class Manga:
         [Params]
          name: str
             The name of the manga.
-
-        [Attrs]
-         exists: bool
-            True if the manga exists, False otherwise.
-         
-         *ALL ATTRIBUTES ARE NULL BY DEFAULT*        
-         name: str     *Dont confuse with param name*
-            The name of the manga.
-
-         rate: float
-            The rate of the manga.
-
-         thumbnaill: str
-            The url of the manga's thumbnail.
-
-         votes: int
-            The number of votes the manga has.
-        
-         length: int
-            The length of the manga in chapters.
-
-         alt_names: list
-            A list of alternative names of the manga.
-            
-         genres: list
-            A list of manga's genres.
-            
-         author: str
-            Manga's author name.
-         
-         artist: str
-            Manga's artist name.
-        
-         status: str
-            Manga's release status.
-        
-         description: str
-            Manga's description.
-        
-         home: lxml.html.HtmlElement
-            The HTML element of the manga's home page.
-
-         url: str
-            The URL of the manga's home page.
 
         [Returns]
          Manga
