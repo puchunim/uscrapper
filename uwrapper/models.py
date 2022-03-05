@@ -15,21 +15,30 @@ class Manga:
             The name of the manga.
 
         [Attrs]
-         *ALL ATTRIBUTES ARE NULL BY DEFAULT*
          exists: bool
             True if the manga exists, False otherwise.
-        
+         
+         *ALL ATTRIBUTES ARE NULL BY DEFAULT*        
          name: str     *Dont confuse with param name*
             The name of the manga.
 
          rate: float
             The rate of the manga.
 
+         thumbnaill: str
+            The url of the manga's thumbnail.
+
+         votes: int
+            The number of votes the manga has.
+        
+         length: int
+            The length of the manga in chapters.
+
          alt_names: list
             A list of alternative names of the manga.
             
-         genders: list
-            A list of manga's genders.
+         genres: list
+            A list of manga's genres.
             
          author: str
             Manga's author name.
@@ -55,7 +64,7 @@ class Manga:
         """
 
         self.exists = False
-        self.alt_names, self.genders = [], []
+        self.alt_names, self.genres = [], []
         self.author, self.artist, self.status = None, None, None
         self.name, self.rate, self.description = None, None, None
         self.thumbnail, self.votes, self.length = None, None, None
@@ -83,7 +92,7 @@ class Manga:
             self.rate = float(self.home.xpath(desc_x.format(1, '/h2/text()'))[0].strip("# "))
             self.votes = int(self.home.xpath(desc_x.format(1, '/h2/small/strong/text()'))[0])
             self.alt_names = self.home.xpath(desc_x.format(2, "/h4/text()"))[0].strip().split(", ")
-            self.genders = self.home.xpath(desc_x.format(3, "/h4/a/text()"))
+            self.genres = self.home.xpath(desc_x.format(3, "/h4/a/text()"))
             self.author = self.home.xpath(desc_x.format(4, "/h4/text()"))[0].strip()
             self.artist = self.home.xpath(desc_x.format(5, "/h4/text()"))[0].strip()
             self.status = self.home.xpath(desc_x.format(6, "/h4/span/text()"))[0]
