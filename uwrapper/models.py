@@ -77,7 +77,7 @@ class Manga:
         # manga exists.
         url = "https://unionleitor.top/pagina-manga/{}".format(name.lower().replace(" ", "-"))
         home = get(url, allow_redirects=False)
-         
+        
         if home.status_code not in [404, 302]:
             # Xpaths to get the additional information of the manga,
             # from the home page.
@@ -100,3 +100,56 @@ class Manga:
             self.artist = self.home.xpath(desc_x.format(5, "/h4/text()"))[0].strip()
             self.status = self.home.xpath(desc_x.format(6, "/h4/span/text()"))[0]
             self.description = self.home.xpath(desc_x.format(8, "/div/div/text()"))[0].strip()
+
+    def __len__(self):
+        """Defines the return of the len() function"""  
+        return self.length
+
+    def __repr__(self):
+        """Defines the return of the repr() function"""
+        return f"<{self.__class__.__name__}: {self.name}>"
+
+    def __str__(self):
+        """Defines the return of the str() function"""
+        return f"<{self.__class__.__name__}: {self.name}>" 
+    
+    def __lt__(self, other):
+        """Check if the manga length is less than the other"""
+        if not hasattr(other, "__len__"): return False
+        
+        return len(self) < len(other)
+    
+    def __le__(self, other):
+        """Check if the manga length is less or equal than the other"""
+        if not hasattr(other, "__len__"): return False
+        
+        return len(self) <= len(other)
+    
+    def __eq__(self, other):
+        """Check if the manga is equal to the other"""
+        if not isinstance(other, Manga): return False
+
+        sd = self.__dict__.copy()
+        od = other.__dict__.copy()
+        sd.pop("home")
+        od.pop("home")
+        
+        return sd == od
+
+    def __ne__(self, other):
+        """Check if the manga is not equal to the other"""
+        if not hasattr(other, "__len__"): return False
+        
+        return not self.__eq__(other)
+    
+    def __gt__(self, other):
+        """Defines the return of the > operator"""
+        if not hasattr(other, "__len__"): return False
+        
+        return len(self) > len(other)
+
+    def __ge__(self, other):
+        """Defines the return of the >= operator"""
+        if not hasattr(other, "__len__"): return False
+        
+        return len(self) >= len(other)
