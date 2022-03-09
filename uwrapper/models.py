@@ -68,9 +68,9 @@ class Manga:
 
         self.exists = False
         self.alt_names, self.genres = [], []
-        self.author, self.artist, self.status = None, None, None
-        self.name, self.rate, self.description = None, None, None
-        self.thumbnail, self.votes, self.length = None, None, None
+        self.author = self.artist = self.status = None
+        self.name = self.rate = self.description = None
+        self.thumbnail = self.votes = self.length = None
 
         # Temporary home and url variables, this vars
         # will be replaced by the real ones when the
