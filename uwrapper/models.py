@@ -1,7 +1,15 @@
 """Classes that represents the models in the website"""
 
+from os import (
+    makedirs, # Function to create dirs
+    listdir # Function to list files
+)
 from requests import get # GET request function
 from lxml import html # HTML parsing library
+from json import (
+    dump, # Save to json function
+    load  # Load from json function
+)
 
 class Manga:
     """
@@ -11,7 +19,11 @@ class Manga:
      exists: bool
         True if the manga exists, False otherwise.
          
-     *ALL ATTRIBUTES ARE NULL BY DEFAULT*        
+     *ALL ATTRIBUTES ARE NULL BY DEFAULT*
+     __name : str
+        The name of the manga, without spaces and with dashes,
+        come from the user.
+          
      name: str
         The name of the manga.
 
@@ -67,15 +79,30 @@ class Manga:
         """
 
         self.exists = False
+        self.__name = name.lower().replace(" ", "-")
         self.alt_names, self.genres = [], []
         self.author = self.artist = self.status = None
         self.name = self.rate = self.description = None
         self.thumbnail = self.votes = self.length = None
+        
+        # Loads the manga's information from
+        # a cached index.json file
+        # TODO: Add a more robust and optional caching system
+        try:
+            if self.__name in listdir("./data/"):
+                self.exists = True
+                self.from_json()
+                if self.status == "Ativo":
+                    self.home = html.fromstring(get(self.url, allow_redirects=False).content)
+                return
+        
+        except FileNotFoundError:
+            pass
 
         # Temporary home and url variables, this vars
         # will be replaced by the real ones when the
         # manga exists.
-        url = "https://unionleitor.top/pagina-manga/{}".format(name.lower().replace(" ", "-"))
+        url = "https://unionleitor.top/pagina-manga/{}".format(self.__name)
         home = get(url, allow_redirects=False)
         
         if home.status_code not in [404, 302]:
@@ -113,21 +140,28 @@ class Manga:
         """Defines the return of the str() function"""
         return f"<{self.__class__.__name__}: {self.name}>" 
     
+    # TODO: Compatibility with int and float values on operations
+    # TODO: Decide how magic methods will work properly
     def __lt__(self, other):
         """Check if the manga length is less than the other"""
-        if not hasattr(other, "__len__"): return False
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
+
         
         return len(self) < len(other)
     
     def __le__(self, other):
         """Check if the manga length is less or equal than the other"""
-        if not hasattr(other, "__len__"): return False
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
         
         return len(self) <= len(other)
     
     def __eq__(self, other):
         """Check if the manga is equal to the other"""
-        if not isinstance(other, Manga): return False
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
+
 
         sd = self.__dict__.copy()
         od = other.__dict__.copy()
@@ -138,18 +172,61 @@ class Manga:
 
     def __ne__(self, other):
         """Check if the manga is not equal to the other"""
-        if not hasattr(other, "__len__"): return False
-        
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
+
         return not self.__eq__(other)
     
     def __gt__(self, other):
         """Defines the return of the > operator"""
-        if not hasattr(other, "__len__"): return False
-        
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
+
         return len(self) > len(other)
 
     def __ge__(self, other):
         """Defines the return of the >= operator"""
-        if not hasattr(other, "__len__"): return False
+        if not isinstance(other, Manga):
+            raise TypeError(f"Comparisons only work with two 'Manga' objects, other's type == {type(other)}")
         
         return len(self) >= len(other)
+
+    def from_json(self, path="./data/"):
+        """
+        Loads the manga's information from a index.json file
+        ---
+        
+        [Params]
+         path: str
+            The path where the file is saved.
+        
+        [Returns]
+         None
+        """
+        with open(f"{path}{self.__name}/index.json", "r", encoding="utf8") as jf:
+            sd = load(jf)
+
+        self.__dict__.update(sd)
+
+    def to_json(self, path="./data/"):
+        """
+        Saves the manga's information in a index.json file
+        ---
+        
+        [Params]
+         path: str
+            The path where the file will be saved.
+        
+        [Returns]
+         None
+        """
+
+        if not self.exists:
+            return False    # TODO: Raise custom exception
+        
+        makedirs((p := f"{path}{self.__name}"), exist_ok=True)
+        with open(f"{p}/index.json", "w+", encoding="utf8") as jf:
+            sd = self.__dict__
+            sd["home"] = None
+            
+            dump(sd, jf, indent=4)
