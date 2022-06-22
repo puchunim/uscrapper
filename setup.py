@@ -7,14 +7,14 @@ with open("requirements.txt", "r") as fh:
     requirements = fh.read().splitlines()
 
 setuptools.setup(
-    name="uwrapper",
-    version="0.3.3b",
+    name="uscrapper",
+    version="0.3.3c",
     author="Pedro Spezziale",
     author_email="pedro_s_m_rodrigues@hotmail.com",
-    description="Simple wrapper for UnionMangas.top's mangas and webtoons",
+    description="Simple scrapper for UnionMangas.top's mangas and webtoons",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/puchunim/uwrapper",
+    url="https://github.com/puchunim/uscrapper",
     packages=setuptools.find_packages(),
     install_requires=requirements,
     classifiers=[

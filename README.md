@@ -1,2 +1,2 @@
-# uwrapper
-Wrapper for UnionMangas.top's mangas and webtoons
+# uscrapper
+Scrapper (~~not a wrapper~~) for UnionMangas.top's mangas and webtoons
